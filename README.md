@@ -34,7 +34,7 @@ export async function main(ns) {
   let args = ns.flags([['branch', 'main']])
 
   await ns.wget(
-    `https://raw.githubusercontent.com/jenheilemann/bitburner-scripts/${args.branch}/src/initStartup.js?ts=${new Date().getTime()}`,
+    `https://raw.githubusercontent.com/Mac2/bitburner-scripts/${args.branch}/src/initStartup.js?ts=${new Date().getTime()}`,
     "initStartup.js"
   );
   ns.spawn("initStartup.js", 1, '--branch', args.branch);
