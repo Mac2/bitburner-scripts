@@ -1,8 +1,8 @@
 import {
         disableLogs,
         getNsDataThroughFile as fetch,
-        setLSItem,
-        clearLSItem,
+        setLSItem,clearLSItem,
+        haveSourceFile,
       } from 'helpers.js'
 
 const staleLocalStorageKeys = [
@@ -33,6 +33,10 @@ export async function main(ns) {
   ns.tprint(`Fetching source file information`)
   const sf = await fetch(ns, `ns.getOwnedSourceFiles()`, '/Temp/getOwnedSourceFiles.txt')
   setLSItem('sourceFiles', sf)
+  await ns.sleep(200)
+  
+  ns.tprint(`Initialize player information`)
+  ns.run('/satellites/playerObserver.js')
   await ns.sleep(200)
   
   if (haveSourceFile(5)) {

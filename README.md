@@ -75,4 +75,7 @@ alias reserve="run lsSet.js reserve"
 
 // set a reserve amount of RAM on HOME, to ensure script exection
 alias reserveRam="run lsSet.js reserveRam"
+
+// set text search in files
+alias grep="run grep.js"
 ```

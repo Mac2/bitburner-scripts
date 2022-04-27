@@ -1,4 +1,8 @@
-import { tryRun, disableLogs } from 'helpers.js'
+import { tryRun, 
+        disableLogs, 
+        getNsDataThroughFile as fetch,
+        setLSItem,
+        } from 'helpers.js'
 
 const sec = 1000
 const min = 60 * sec
@@ -44,9 +48,10 @@ const late_timers = [
 //  { file: '/gang/ascend.js',                  freq: 8.1*sec,   last: 0 },
 //  { file: '/gang/augments.js',                freq: 12 *sec,   last: 0 },
 //  { file: '/gang/tasks.js',                   freq: 30 *sec,   last: 0 },
-// BN10
-//  { file: '/sleeves/metaObserver.js',         freq: 31 * sec,  last: Date.now() },
-//  { file: '/sleeves/manager.js',              freq: 31.1*sec,  last: Date.now() },
+  // BN10
+  { file: '/sleeves/metaObserver.js',         freq: 31 * sec,  last: Date.now() },
+  { file: '/sleeves/manager.js',              freq: 31.1*sec,  last: Date.now() },
+  
   { file: '/satellites/activityObserver.js',  freq: min,       last: Date.now() },
   { file: '/satellites/pservObserver.js',     freq: min+100,   last: Date.now() },
   { file: '/satellites/hackerObserver.js',    freq: min+200,   last: 0 },

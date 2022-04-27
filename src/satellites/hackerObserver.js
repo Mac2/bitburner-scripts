@@ -42,7 +42,7 @@ export async function main(ns) {
   
   while(true) {  
 
-    const [totalBotRam, freeBotRam] = getBotRamInfo(ns)
+    const [totalBotRam, freeBotRam] = await getBotRamInfo(ns)
     let early = (totalBotRam > 256 ) ? false : true
 
     nmap = await networkMap(ns)
