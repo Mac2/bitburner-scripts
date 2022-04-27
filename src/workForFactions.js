@@ -5,7 +5,7 @@ import {
   announce,
   formatDuration,
   formatMoney,formatRam,
-  formatNumber,
+  formatNumber,formatNumberShort,
 } from 'helpers.js'
 
 async function fetch(ns, cmd, filename) {
@@ -599,7 +599,7 @@ export async function workForSingleFaction(ns, factionName, forceUnlockDonations
       currentReputation = ns.getFactionRep(factionName); // Update to capture the reputation earned when restarting work
       lastActionRestart = Date.now(); repGainRatePerMs = ns.getPlayer().workRepGainRate; // Note: In order to get an accurate rep gain rate, we must wait for the first game tick (200ms) after starting work
       while (repGainRatePerMs === ns.getPlayer().workRepGainRate && (Date.now() - lastActionRestart < 400)) await ns.sleep(1); // TODO: Remove this if/when the game bug is fixed
-      repGainRatePerMs = ns.getPlayer().workRepGainRate / 200 * (hasFocusPenalty && !shouldFocusAtWork ? 0.8 : 1 /* penalty if we aren't focused but don't have the aug to compensate */);￼        
+      repGainRatePerMs = ns.getPlayer().workRepGainRate / 200 * (hasFocusPenalty && !shouldFocusAtWork ? 0.8 : 1 /* penalty if we aren't focused but don't have the aug to compensate */);
     } else {
       announce(ns, `Something went wrong, failed to start working for faction "${factionName}" (Not joined?)`, 'error');
       break;
@@ -616,7 +616,7 @@ export async function workForSingleFaction(ns, factionName, forceUnlockDonations
       lastStatusUpdateTime = Date.now(); lastRepMeasurement = currentReputation;
       const eta_milliseconds = (factionRepRequired - currentReputation) / repGainRatePerMs;
       ns.print((lastFactionWorkStatus = status) + ` Currently at ${Math.round(currentReputation).toLocaleString()}, earning ${formatNumberShort(repGainRatePerMs * 1000)} rep/sec. ` +
-      (hasFocusPenaly && !shouldFocusAtWork ? ' after 20% non-focus Penalty' : '') + ` (ETA: ${formatDuration(eta_milliseconds)})`);
+      (hasFocusPenalty && !shouldFocusAtWork ? ' after 20% non-focus Penalty' : '') + ` (ETA: ${formatDuration(eta_milliseconds)})`);
     }
     await tryBuyReputation(ns)
 
@@ -911,7 +911,7 @@ async function workForMegacorpFactionInvite(ns, factionName, waitForInvite) {
       if (!backdoored) // Check if an external script has backdoored this company's server yet. If so, it affects our ETA. (Don't need to check again once we discover it is)
         backdoored = await fetch(ns, `ns.getServer('${serverByCompany[companyName]}').backdoorInstalled`, '/Temp/company-is-backdoored.txt');
       const cancellationMult = backdoored ? 0.75 : 0.5; // We will lose some of our gained reputation when we stop working early
-      repGainRatePerMs *= cancellationMult;￼           
+      repGainRatePerMs *= cancellationMult;
       // Actually measure how much reputation we've earned since our last update, to give a more accurate ETA including external sources of rep
       let measuredRepGainRatePerMs = (ns.getCompanyRep(companyName) - lastRepMeasurement) / (Date.now() - lastStatusUpdateTime);
       if (currentReputation > lastRepMeasurement + statusUpdateInterval * repGainRatePerMs * 2) // Detect a sudden increase in rep, but don't use it to update the expected rate
