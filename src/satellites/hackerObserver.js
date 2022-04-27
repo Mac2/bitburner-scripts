@@ -378,8 +378,8 @@ export class Targeter {
     let pid
 
     for ( const miner of minerManager.miners ) {
-      this.ns.print(`ns.exec('${file}', '${miner.name}', ${miner.threads}, ` +
-        `${formatDuration(wait)}, '${this.target.name}', ${rand})`)
+      //this.ns.print(`ns.exec('${file}', '${miner.name}', ${miner.threads}, ` +
+      //  `${formatDuration(wait)}, '${this.target.name}', ${rand})`)
       pid = this.ns.exec(file, miner.name, miner.threads, wait, this.target.name, rand)
       if (pid > 0 && record) {
         this.processManager.addProcess(pid, miner.threads, this.target.name, file)
