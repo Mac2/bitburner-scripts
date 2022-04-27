@@ -54,6 +54,7 @@ const filesToDownload = [
   'crime.js',
   'doProcess.js',
   'find.js',
+  'grep.js',
   'grow.js',
   'hack.js',
   'helpers.js',
@@ -68,7 +69,7 @@ const filesToDownload = [
   'weaken.js',
   'workForFactions.js',
 ]
-const baseUrl = 'https://raw.githubusercontent.com/jenheilemann/bitburner-scripts/'
+const baseUrl = 'https://raw.githubusercontent.com/Mac2/bitburner-scripts/'
 
 
 /**
