@@ -9,8 +9,10 @@ const solvers = {
   "Find Largest Prime Factor"           : "/contracts/primeFactorSolver.js",
   "Subarray with Maximum Sum"           : "/contracts/subarrayMaximumSolver.js",
   "Total Ways to Sum"                   : "/contracts/totalWaysToSumSolver.js",
+  "Total Ways to Sum II"                : "/contracts/totalWaysToSumSolver2.js",  
   "Spiralize Matrix"                    : "/contracts/spiralizeMatrixSolver.js",
   "Array Jumping Game"                  : "/contracts/arrayJumpingSolver.js",
+  "Array Jumping Game II"               : "/contracts/arrayJumpingSolver2.js",  
   "Merge Overlapping Intervals"         : "/contracts/mergeIntervalsSolver.js",
   "Generate IP Addresses"               : "/contracts/generateIpAddsSolver.js",
   "Algorithmic Stock Trader I"          : "/contracts/stockTraderSolver.js",
@@ -20,8 +22,11 @@ const solvers = {
   "Minimum Path Sum in a Triangle"      : "/contracts/minimumPathSumSolver.js",
   "Unique Paths in a Grid I"            : "/contracts/uniquePaths1Solver.js",
   "Unique Paths in a Grid II"           : "/contracts/uniquePaths2Solver.js",
+  "Shortest Path in a Grid"             : "/contracts/shortestPathGridSolver.js",  
   "Sanitize Parentheses in Expression"  : "/contracts/sanitizeParensSolver.js",
   "Find All Valid Math Expressions"     : "/contracts/findValidExpressionsSolver.js",
+  "HammingCodes: Integer to encoded Binary" : "/contracts/hammingInt2BinSolver.js",
+  "HammingCodes: Encoded Binary to Integer": "/contracts/hammingBin2IntSolver.js",
 }
 
 /**

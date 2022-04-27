@@ -5,7 +5,7 @@ export async function main(ns) {
   let args = JSON.parse(ns.flags([['dataString', '']]).dataString)
   // let data = ns.codingcontract.getData(args.file, args.server)
 
-  ns.tprint(`Found ${args.file} (${args.type}) on ${args.server}`)
+  ns.tprint(`Found ${args.file} (${args.type}) on ${args.server} - missing Solver!`)
 
   // let answer = solve(data)
   // ns.tprint(`My answer: ${answer}`)
