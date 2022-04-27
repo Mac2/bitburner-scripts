@@ -36,7 +36,7 @@ export async function main(ns) {
   // free Ram > 20%, ignore in early Stage (<256GB)
   if (free/total >= 0.2 && !out_of_ram && total > 256) {
     let msg = `skipping buyer.js because ${formatNumber(free*100/total)}% resources are still available`
-    announce(ns, msg)
+    //announce(ns, msg)
     ns.print(msg)
     return
   }
