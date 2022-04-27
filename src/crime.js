@@ -2,6 +2,8 @@ import {
           getNsDataThroughFile as fetch,
           fetchPlayer,
           disableLogs,
+          haveSourceFile,
+          announce,
         } from 'helpers.js'
 
 const crimes = [
@@ -59,6 +61,11 @@ export async function main(ns) {
   let time = 1, again = true, crime
   let karma =  ns.heart.break()
 
+  // If you are not in BitNode-4, then you must have Level 1 of Source-File 4 in order to use this function.
+  if (!haveSourceFile(4)) {
+    announce(ns,"missing SF4 - skip crime")
+    return 
+  }
   while (again) {
     crime = await chooseCrime(ns, args)
     time = await fetch(ns, `ns.commitCrime('${crime}')`, `/Temp/commitCrime.txt`)

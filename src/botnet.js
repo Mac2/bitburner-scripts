@@ -2,7 +2,7 @@ import { networkMapFree } from 'network.js'
 import {
           runCommandAndWait,
           disableLogs,
-          announce,
+          announce,formatRam,
         } from 'helpers.js'
 // magic number (Ram required to run breadwinner.js)
 const hackingScriptSize = 1.7
@@ -46,4 +46,32 @@ async function zombify(ns, server) {
       `/Temp/scp-${script}.js`)
   }
   ns.print(`Copied ${scripts} to ${server}`)
+}
+
+export async function searchAvailableZombies(ns) {
+  // collect all potential bots, incl HOME
+  let servers = Object.values(await networkMapFree())
+    .filter(s => s.data.hasAdminRights &&
+                (
+                  s.files.includes(scripts[0]) &&
+                  s.files.includes(scripts[1]) &&
+                  s.files.includes(scripts[2])
+                )
+    )
+    return servers
+}
+
+/**
+ * @param {NS} ns
+ **/
+export async function getBotRamInfo(ns) {
+  let servers = await searchAvailableZombies(ns)  
+  let totalRam=0, availRam=0
+
+  for (let server of servers) {
+    totalRam += server.maxRam
+    availRam += server.maxRam - server.data.ramUsed
+  }
+  ns.print(`totalBots: ${servers.length}: total BotRam: ${formatRam(totalRam)} free BotRam: ${formatRam(availRam)} ${availRam*100/totalRam}%`)
+  return [totalRam,availRam]
 }

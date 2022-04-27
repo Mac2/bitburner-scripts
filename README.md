@@ -70,6 +70,9 @@ alias set="run lsSet.js"
 alias working="run lsSet.js working"
 alias done="run lsClear.js working"
 
-// set a reserve amount manually, above reseved money for buying programs
+// set a reserve amount manually, above reserved money for buying programs
 alias reserve="run lsSet.js reserve"
+
+// set a reserve amount of RAM on HOME, to ensure script exection
+alias reserveRam="run lsSet.js reserveRam"
 ```

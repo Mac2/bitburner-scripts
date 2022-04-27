@@ -3,6 +3,7 @@ import { toolsCount,
   getLSItem,
   fetchPlayer,
   getNsDataThroughFile as fetch,
+  haveSourceFile,
   } from 'helpers.js'
 import { earnFactionInvite } from 'workForFactions.js'
 const sec = 1000, min = 60*sec, hour = 60*min
@@ -27,12 +28,19 @@ export async function main(ns) {
     ns.print('trying to join a gang')
     return await joinGang(ns)
   }
-
-  if ( !inAGang && !canJoinGang(ns) ) {
-    ns.print(`inAGang: ${inAGang}, canJoin: ${canJoinGang(ns)}`)
-    return runGetKarma(ns, crimePS)
+  
+  // skip gangs in BN1 (early game)
+  if ( fetchPlayer().bitNodeN !== 1) {
+    if ( !inAGang && !canJoinGang(ns) ) {
+      if ( haveSourceFile(4) ) {
+        ns.print(`inAGang: ${inAGang}, canJoin: ${canJoinGang(ns)}`)
+        return runGetKarma(ns, crimePS)
+      //} else {
+      //  announce(ns,"missing SF4 - skip runGetKarma")
+      }
+    }
   }
-
+  
   if ( toolsCount() >= 5 ) {
     if ( crimePS ) {
       announce(ns, 'Switching from crime to grinding faction rep')

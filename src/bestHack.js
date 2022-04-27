@@ -7,6 +7,7 @@ const minSecurityCoefficient = 2
 const growthCap = 100 // because otherwise N00dles is always on the top of the list
 const securityWeight = 200
 const maxWeakenTime = 15 * 60 * 1000
+const maxWeakenTime_early = 5 * 60 * 1000
 
 export function calcScore(server) {
   // {"hackingLvl":1,"maxMoney":0,"minSecurity":1,"growth":1}
@@ -45,6 +46,15 @@ export class BestHack {
   /**
    * @param {NS} ns
    * @param {object} player
+   */
+  findEarlyTop(ns, player) {
+    let filtered = this.scoreAndFilterServers(ns, player,true)
+    return filtered.sort((a, b) => b.score - a.score)
+  }
+
+  /**
+   * @param {NS} ns
+   * @param {object} player
    * @param {number} count
    */
   findTopN(ns, player, count) {
@@ -56,13 +66,22 @@ export class BestHack {
    * @param {NS} ns
    * @param {object} player
    */
-  scoreAndFilterServers(ns, player) {
+  scoreAndFilterServers(ns, player,early=false) {
     let scores = this.calcServerScores()
-    let filtered = Object.values(scores)
+    let filtered
+    if (early) {
+      filtered = Object.values(scores)
       .filter((server) => server.hackingLvl <= player.hacking &&
                           server.data.hasAdminRights &&
                           server.maxMoney > 0 &&
-                          ns.formulas.hacking.weakenTime(server.data, player) < maxWeakenTime)
+                          ns.getWeakenTime(server.name) < maxWeakenTime_early)
+    } else {
+      filtered = Object.values(scores)
+      .filter((server) => server.hackingLvl <= player.hacking &&
+                          server.data.hasAdminRights &&
+                          server.maxMoney > 0 &&
+                          ns.getWeakenTime(server.name) < maxWeakenTime)
+    }
     return filtered
   }
 

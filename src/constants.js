@@ -16,7 +16,7 @@ export const rootFiles = [
 ]
 
 export const purchaseables = rootFiles.concat([
-  // { name: "Formulas.exe", cost: 5000000000, }
+  { name: "Formulas.exe", cost: 5000000000, }
 ])
 
 
@@ -33,6 +33,7 @@ export const lsKeys = {
   NMAP : 'jh_network_map',
   PLAYER : 'jh_player',
   RESERVE : 'jh_reserve',
+  RESERVERAM : 'mac_reserveram',
   BITNODE : 'jh_bn_multipliers',
   SOURCEFILES : 'jh_owned_sourcefiles',
   WORKING : 'jh_working',
@@ -41,4 +42,7 @@ export const lsKeys = {
   CLASHTIME : 'jh_next_territory_warefare',
   GANGMETA : 'jh_gang_information',
   SLEEVEMETA : 'jh_sleeve_information',
+  PSERVMINRAM: 'mac_pserv_minram',
+  PSERVMAXRAM: 'mac_pserv_maxram',
+  OUTOFMEMORY: 'mac_outofmemory',
 }

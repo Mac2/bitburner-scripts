@@ -4,7 +4,7 @@ import {
   disableLogs,
   announce,
   formatDuration,
-  formatMoney,
+  formatMoney,formatRam,
   formatNumber,
 } from 'helpers.js'
 
@@ -152,6 +152,13 @@ export async function main(ns) {
   let skipFactions = (options.skip || []);
   fastCrimesOnly = options['fast-crimes-only'];
   favorToDonate = await fetch(ns, `ns.getFavorToDonate()`, '/Temp/getFavorToDonate.txt')
+
+  const homeMaxRam = await fetch(ns, 'ns.getServerMaxRam("home")', '/Temp/getHomeMaxRam.txt')
+  const homeUsedRam = await fetch(ns, 'ns.getServerUsedRam("home")}', '/Temp/getHomeUsedRam.txt')
+  if (homeMaxRam - homeUsedRam < 196) {
+    ns.print(`needed at least 196GB free RAM on HOME! ${formatRam(homeMaxRam - homeUsedRam)} - skip`)
+    return
+  }
 
   // Log command line args used
   if (firstFactions.length > 0) {
@@ -319,7 +326,7 @@ export async function main(ns) {
       await workForSingleFaction(ns, faction, true, true);
     if (scope < 7) continue;
 
-    // Strategy 8: Commit crimes until until the highest known faction requirement would be met. We may have been missing other requirements for those factions, but at least we can get this out of the way.
+    // Strategy 8: Commit crimes until the highest known faction requirement would be met. We may have been missing other requirements for those factions, but at least we can get this out of the way.
     await crimeForKillsKarmaStats(ns, 30, 90, 1500);
     if (scope < 8) continue;
 

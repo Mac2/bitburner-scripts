@@ -1,12 +1,14 @@
 import { fetchServer } from 'network.js'
 import { waitForCash,
          clearLSItem,
-         setLSItem,
+         setLSItem,getLSItem,
          getNsDataThroughFile as fetch,
          disableLogs,
          announce,
-         formatRam,
+         formatRam,formatNumber,
         } from 'helpers.js'
+import { getBotRamInfo } from 'botnet.js'
+        
 const argsSchema = [
   ['size', 7],
 ]
@@ -34,6 +36,18 @@ export async function main(ns) {
 
   for (let i = 0; i < limit; i++) {
     hostname = "pserv-" + i
+
+    // force spawning new Resources
+    let out_of_ram=Boolean(getLSItem("outofmemory") || false)
+    const [total,free] = await getBotRamInfo(ns)
+    // free Ram > 20%, ignore in early Stage (<256GB)
+    if (free/total >= 0.2 && !out_of_ram && total > 256) {
+     let msg = `skipping buyer.js because ${formatNumber(free*100/total)}% resources are still available (OutofMem: ${out_of_ram})`
+     //announce(ns, msg)
+     ns.print(msg)
+     return
+   }
+  
     count += await buyNewOrReplaceServer(ns, hostname, cost, ram)
     await ns.sleep(2000)
   }
@@ -80,6 +94,7 @@ async function purchaseNewServer(ns, hostname, cost, ram) {
   if (result) {
     announce(ns, `Purchased new server, ${hostname} with ${formatRam(ram)}`)
     clearLSItem('nmap')
+    clearLSItem('outofmemory')
     return 1
   }
   return 0
@@ -106,6 +121,7 @@ async function upgradeServer(ns, host, cost, ram) {
   if (result) {
     announce(ns, `Upgraded server ${host.name} with ${formatRam(ram)}`)
     clearLSItem('nmap')
+    clearLSItem('outofmemory')
     return 1
   }
   return 0

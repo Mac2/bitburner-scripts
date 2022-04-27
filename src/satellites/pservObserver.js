@@ -1,10 +1,12 @@
 import {
   getNsDataThroughFile as fetch,
   runCommand,
-  formatRam,
+  formatNumber,formatRam,
   announce,
+  getLSItem,
 } from 'helpers.js'
 import { networkMapFree } from 'network.js'
+import { getBotRamInfo } from 'botnet.js'
 
 // payoff within the hour
 const min = 60, hour = min * 60
@@ -27,7 +29,18 @@ export async function main(ns) {
   if (nextRam == 0) {
     return
   }
-
+  
+  // force spawning new Resources
+  let out_of_ram=Boolean(getLSItem("outofmemory") || false)
+  const [total,free] = await getBotRamInfo(ns)
+  // free Ram > 20%, ignore in early Stage (<256GB)
+  if (free/total >= 0.2 && !out_of_ram && total > 256) {
+    let msg = `skipping buyer.js because ${formatNumber(free*100/total)}% resources are still available`
+    announce(ns, msg)
+    ns.print(msg)
+    return
+  }
+  
   let msg = `Running buyer.js to purchase ${formatRam(2**nextRam)} (currently: ${formatRam(currRam)})`
   announce(ns, msg)
   ns.tprint(msg)
@@ -76,6 +89,14 @@ async function nextRamSize(ns, currRam) {
     if ( totalCost < incomePerPayoffTime ) {
       ns.print(`(${2**i}) totalCost < incomePerPayoffTime`)
       ns.print(`Returning ${2**i}`)
+
+      let maxRam=Number(getLSItem("pservMaxRam") || 0)
+      let minRam=Number(getLSItem("pservMinRam") || 8)
+      //ns.print(`allowed RAM Range: ${minRam} (i: ${Math.log2(minRam)}) - ${maxRam} (i: ${Math.log2(maxRam)})`)  
+      if (maxRam > 0) {
+        i=Math.min(i,Math.log2(maxRam))
+      }
+      i=Math.max(i,Math.log2(minRam))
       return i
     }
   }

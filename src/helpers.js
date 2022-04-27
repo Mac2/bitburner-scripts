@@ -16,11 +16,24 @@ export function mySleep(ms){
  * @cost 0 GB
  */
 export function haveSourceFile(num, level = 1) {
+  // manual read player info once, if not previously existing
+  if (!fetchPlayer()) {
+    ns.run('/satelite/playerObserver.js');
+  }
   if ( fetchPlayer().bitNodeN == num )
     return true
 
   let ownedSourceFiles = getLSItem('sourceFiles')
   return ownedSourceFiles.some(sf => sf.n == num && sf.lvl >= level )
+}
+
+/**
+ * @returns {bool} Formulas API usable
+ * @cost 0 GB
+ */
+export function hasFormulas() {
+  let player = getLSItem('player')
+  return (player.programs.includes("Formulas.exe"))
 }
 
 /**
@@ -39,6 +52,16 @@ export function toolsCount() {
  */
 export function disableLogs(ns, listOfLogs) {
   ['disableLog'].concat(...listOfLogs).forEach(log => ns.disableLog(log));
+}
+
+/**
+ * @param {NS} ns
+ * @param {array} list of loggable functions to enable
+ * @cost 0 GB
+ */
+export function enableLogs(ns, listOfLogs) {
+  ns.disableLog('enableLog')
+  listOfLogs.forEach(log => ns.enableLog(log));
 }
 
 /**
@@ -81,6 +104,19 @@ export function reserve(ns) {
       return file.cost + manualReserve
     }
   }
+  return manualReserve
+}
+
+/**
+ * Reserve a certain amount of RAM on HOME for scripting
+ * You can manually reserve an amount by setting a number in localStorage.
+ *     run lsSet.js reserveRam 128
+ *
+ * @param {NS} ns
+ * @cost 0.1 GB
+ */
+export function reserveRam(ns) {
+  let manualReserve = Number(getLSItem('reserveRam') || 50)
   return manualReserve
 }
 
