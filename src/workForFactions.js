@@ -154,7 +154,7 @@ export async function main(ns) {
   favorToDonate = await fetch(ns, `ns.getFavorToDonate()`, '/Temp/getFavorToDonate.txt')
 
   const homeMaxRam = await fetch(ns, 'ns.getServerMaxRam("home")', '/Temp/getHomeMaxRam.txt')
-  const homeUsedRam = await fetch(ns, 'ns.getServerUsedRam("home")}', '/Temp/getHomeUsedRam.txt')
+  const homeUsedRam = await fetch(ns, 'ns.getServerUsedRam("home")', '/Temp/getHomeUsedRam.txt')
   if (homeMaxRam - homeUsedRam < 196) {
     ns.print(`needed at least 196GB free RAM on HOME! ${formatRam(homeMaxRam - homeUsedRam)} - skip`)
     return
